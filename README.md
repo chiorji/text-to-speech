@@ -1,6 +1,8 @@
 # Text To Speech
 A non-automated text-to-speech translator
 
+![basic calculator](/text-to-speech-gui.PNG)
+
 ## Acceptance Criteria (System Requirements)
 1. Users been able to see text in a text box
 2. Texts in the text area field are read-aloud by the system

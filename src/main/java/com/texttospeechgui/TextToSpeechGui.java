@@ -44,7 +44,7 @@ public class TextToSpeechGui extends Application {
         textToSpeechLabel.setMaxWidth(Double.MAX_VALUE);
         textToSpeechLabel.setAlignment(Pos.CENTER);
         textToSpeechLabel.getStyleClass().add("text-to-speech-label");
-        box.getChildren().add(textToSpeechLabel);
+//        box.getChildren().add(textToSpeechLabel);
 
         textArea = new TextArea();
         textArea.setWrapText(true);
@@ -54,10 +54,10 @@ public class TextToSpeechGui extends Application {
         textAreaPane.setPadding(new Insets(0, 15, 0, 15));
         textAreaPane.getChildren().add(textArea);
 
-        box.getChildren().add(textAreaPane);
+//        box.getChildren().add(textAreaPane);
 
         GridPane settingsPane = createSettingComponents();
-        box.getChildren().add(settingsPane);
+//        box.getChildren().add(settingsPane);
 
         Button speakButton = createImageButton();
         speakButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -74,7 +74,8 @@ public class TextToSpeechGui extends Application {
         StackPane speakButtonPane = new StackPane();
         speakButtonPane.setPadding(new Insets(40, 20, 0, 20));
         speakButtonPane.getChildren().add(speakButton);
-        box.getChildren().add(speakButtonPane);
+
+        box.getChildren().addAll(textToSpeechLabel, textAreaPane, settingsPane, speakButtonPane);
 
         return new Scene(box, APP_WIDTH, APP_HEIGHT);
     }
@@ -95,7 +96,7 @@ public class TextToSpeechGui extends Application {
     private GridPane createSettingComponents() {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
-        gridPane.setPadding(new Insets(10,0,0,0));
+        gridPane.setPadding(new Insets(10, 0, 0, 0));
 
         Label voiceLabel = new Label("Voice");
         voiceLabel.getStyleClass().add("setting-label");
@@ -106,8 +107,8 @@ public class TextToSpeechGui extends Application {
         Label volumeLabel = new Label("Volume");
         volumeLabel.getStyleClass().add("setting-label");
 
-        gridPane.add(voiceLabel, 0,0);
-        gridPane.add(rateLabel, 1,0);
+        gridPane.add(voiceLabel, 0, 0);
+        gridPane.add(rateLabel, 1, 0);
         gridPane.add(volumeLabel, 2, 0);
 
         // center labels
