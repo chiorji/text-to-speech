@@ -1,6 +1,8 @@
 package com.texttospeechgui;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -58,6 +60,17 @@ public class TextToSpeechGui extends Application {
         box.getChildren().add(settingsPane);
 
         Button speakButton = createImageButton();
+        speakButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String msg = textArea.getText();
+                String voice = voices.getValue();
+                String rate = rates.getValue();
+                String volume = volumes.getValue();
+
+                TextToSpeechGuiController.speak(msg, voice, rate, volume);
+            }
+        });
         StackPane speakButtonPane = new StackPane();
         speakButtonPane.setPadding(new Insets(40, 20, 0, 20));
         speakButtonPane.getChildren().add(speakButton);
@@ -103,12 +116,18 @@ public class TextToSpeechGui extends Application {
         GridPane.setHalignment(voiceLabel, HPos.CENTER);
 
         voices = new ComboBox<>();
+        voices.getItems().addAll(TextToSpeechGuiController.getVoices());
+        voices.setValue(voices.getItems().get(0));
         voices.getStyleClass().add("setting-combo-box");
 
         rates = new ComboBox<>();
+        rates.getItems().addAll(TextToSpeechGuiController.getSpeedRates());
+        rates.setValue(rates.getItems().get(0));
         rates.getStyleClass().add("setting-combo-box");
 
         volumes = new ComboBox<>();
+        volumes.getItems().addAll(TextToSpeechGuiController.getVolumeLevels());
+        volumes.setValue(volumes.getItems().get(0));
         volumes.getStyleClass().add("setting-combo-box");
 
         gridPane.add(voices, 0, 1);
