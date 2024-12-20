@@ -1,5 +1,5 @@
 # Text To Speech
-A non-automated text-to-speech translator
+A non-automated text-to-speech translator. Describe what the project is about. give a summarized version of how it works
 
 ![basic calculator](/text-to-speech-gui.PNG)
 
