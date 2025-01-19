@@ -42,3 +42,9 @@
 .speak-button:pressed {
     -fx-opacity: .75;
 }
+
+.load-file-button {
+    -fx-background-color: #4F1D1D;
+    -fx-text-fill: whitesmoke;
+    -fx-opacity: .75;
+}

@@ -7,19 +7,21 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class TextToSpeechGui extends Application {
     private static final int APP_WIDTH = 375;
@@ -40,7 +42,7 @@ public class TextToSpeechGui extends Application {
         VBox box = new VBox();
         box.getStyleClass().add("body");
 
-        Label textToSpeechLabel = new Label("Text-To-Speech");
+        Label textToSpeechLabel = new Label("Text To Speech");
         textToSpeechLabel.setMaxWidth(Double.MAX_VALUE);
         textToSpeechLabel.setAlignment(Pos.CENTER);
         textToSpeechLabel.getStyleClass().add("text-to-speech-label");
@@ -60,10 +62,33 @@ public class TextToSpeechGui extends Application {
 //        box.getChildren().add(settingsPane);
 
         Button speakButton = createImageButton();
+        Button loadFromFileButton = createLoadFromFileButton();
+
+        loadFromFileButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(new File("/Users/mac/downloads"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt", "*.doc", "*.rtf"));
+            File file = fileChooser.showOpenDialog(null);
+            if(file == null) return;
+            StringBuilder fileContent = new StringBuilder();
+            try(Scanner sc = new Scanner(Paths.get(file.getPath()))) {
+                while(sc.hasNextLine()) fileContent.append(sc.nextLine());
+                textArea.textProperty().setValue(String.valueOf(fileContent));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         speakButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 String msg = textArea.getText();
+                if(msg.isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Cannot read content, text field is empty");
+                    alert.setTitle("Cannot proceed");
+                    alert.showAndWait();
+                    return;
+                }
                 String voice = voices.getValue();
                 String rate = rates.getValue();
                 String volume = volumes.getValue();
@@ -71,11 +96,16 @@ public class TextToSpeechGui extends Application {
                 TextToSpeechGuiController.speak(msg, voice, rate, volume);
             }
         });
-        StackPane speakButtonPane = new StackPane();
-        speakButtonPane.setPadding(new Insets(40, 20, 0, 20));
-        speakButtonPane.getChildren().add(speakButton);
 
-        box.getChildren().addAll(textToSpeechLabel, textAreaPane, settingsPane, speakButtonPane);
+
+        VBox buttonControlPane = new VBox();
+        buttonControlPane.setPadding(new Insets(40, 20, 0, 20));
+        buttonControlPane.setSpacing(10);
+
+        buttonControlPane.getChildren().add(speakButton);
+        buttonControlPane.getChildren().add(loadFromFileButton);
+
+        box.getChildren().addAll(textToSpeechLabel, textAreaPane, settingsPane, buttonControlPane);
 
         return new Scene(box, APP_WIDTH, APP_HEIGHT);
     }
@@ -138,6 +168,14 @@ public class TextToSpeechGui extends Application {
         gridPane.setAlignment(Pos.CENTER);
 
         return gridPane;
+    }
+
+    public Button createLoadFromFileButton() {
+        Button button = new Button("Load text from file");
+        button.setAlignment(Pos.CENTER);
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.getStyleClass().add("load-file-button");
+        return button;
     }
 
     public static void main(String[] args) {

@@ -22,13 +22,13 @@ public class TextToSpeechGuiController {
 
 
     public static ArrayList<String> getSpeedRates() {
-        String[] rates = {"60", "100", "140", "170", "200"};
+        String[] rates = {"100", "120", "125", "130", "140"};
         return new ArrayList<>(Arrays.asList(rates));
     }
 
     public static ArrayList<String> getVolumeLevels() {
         ArrayList<String> volumes = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 5; i++) {
             volumes.add(Integer.toString(i));
         }
         return volumes;
